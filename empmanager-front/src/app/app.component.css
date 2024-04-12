@@ -1,0 +1,12 @@
+.rotate-cog {
+  animation: rotateCog 3s linear infinite;
+}
+
+@keyframes rotateCog {
+  from {
+    transform: none;
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
