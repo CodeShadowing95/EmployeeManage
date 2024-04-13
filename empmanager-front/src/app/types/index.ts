@@ -1,4 +1,4 @@
 export interface Color {
   name: string;
-  className: string;
+  color: string;
 }

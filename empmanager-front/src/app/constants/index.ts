@@ -3,90 +3,90 @@ import { Color } from "../types";
 export const basicTailwindColors: Color[] = [
   {
     name: "Slate",
-    className: "bg-slate-500 w-7 h-7 rounded-full p-2 border",
+    color: "slate"
   },
   {
     name: "Gray",
-    className: "bg-gray-500 w-7 h-7 rounded-full p-2 border",
+    color: "gray"
   },
   {
     name: "Zinc",
-    className: "bg-zinc-500 w-7 h-7 rounded-full p-2 border",
+    color: "zinc"
   },
   {
     name: "Neutral",
-    className: "bg-neutral-500 w-7 h-7 rounded-full p-2 border",
+    color: "neutral"
   },
   {
     name: "Stone",
-    className: "bg-stone-500 w-7 h-7 rounded-full p-2 border",
+    color: "stone"
   },
   {
     name: "Red",
-    className: "bg-red-500 w-7 h-7 rounded-full p-2 border",
+    color: "red"
   },
   {
     name: "Orange",
-    className: "bg-orange-500 w-7 h-7 rounded-full p-2 border",
+    color: "orange"
   },
   {
     name: "Amber",
-    className: "bg-amber-500 w-7 h-7 rounded-full p-2 border",
+    color: "amber"
   },
   {
     name: "Yellow",
-    className: "bg-yellow-500 w-7 h-7 rounded-full p-2 border",
+    color: "yellow"
   },
   {
     name: "Lime",
-    className: "bg-lime-500 w-7 h-7 rounded-full p-2 border",
+    color: "lime"
   },
   {
     name: "Green",
-    className: "bg-green-500 w-7 h-7 rounded-full p-2 border",
+    color: "green"
   },
   {
     name: "Emerald",
-    className: "bg-emerald-500 w-7 h-7 rounded-full p-2 border",
+    color: "emerald"
   },
   {
     name: "Teal",
-    className: "bg-teal-500 w-7 h-7 rounded-full p-2 border",
+    color: "teal"
   },
   {
     name: "Cyan",
-    className: "bg-cyan-500 w-7 h-7 rounded-full p-2 border",
+    color: "cyan"
   },
   {
     name: "Sky",
-    className: "bg-sky-500 w-7 h-7 rounded-full p-2 border",
+    color: "sky"
   },
   {
     name: "Blue",
-    className: "bg-blue-500 w-7 h-7 rounded-full p-2 border",
+    color: "blue"
   },
   {
     name: "Indigo",
-    className: "bg-indigo-500 w-7 h-7 rounded-full p-2 border",
+    color: "indigo"
   },
   {
     name: "Violet",
-    className: "bg-violet-500 w-7 h-7 rounded-full p-2 border",
+    color: "violet"
   },
   {
     name: "Purple",
-    className: "bg-purple-500 w-7 h-7 rounded-full p-2 border",
+    color: "purple"
   },
   {
     name: "Fuchsia",
-    className: "bg-fuchsia-500 w-7 h-7 rounded-full p-2 border",
+    color: "fuchsia"
   },
   {
     name: "Pink",
-    className: "bg-pink-500 w-7 h-7 rounded-full p-2 border",
+    color: "pink"
   },
   {
     name: "Rose",
-    className: "bg-rose-500 w-7 h-7 rounded-full p-2 border",
+    color: "rose"
   },
 ];

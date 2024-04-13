@@ -64,6 +64,8 @@ export class AppComponent implements OnInit {
   isDarkMode: boolean = false;
   isAbsolute: boolean = false;
   tabType: string = 'line';
+  colors: Color[] = basicTailwindColors;
+  currentColor: string = '';
 
   /**
    * This constructor injects an instance of EmployeeService.
@@ -76,7 +78,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getEmployees();
-    
   }
 
   // CRUD Operations
@@ -242,7 +243,15 @@ export class AppComponent implements OnInit {
     this.isAbsolute = !this.isAbsolute;
   }
 
-  changeTabType() {
-    this.tabType = this.tabType === 'line' ? 'shadow' : 'line';
+  changeTabType(type: string) {
+    if(type === 'line') {
+      this.tabType = 'line';
+    } else {
+      this.tabType = 'shadow';
+    }
+  }
+
+  changeColor(color?: string): void {
+    this.currentColor = color ? color : '';    
   }
 }
