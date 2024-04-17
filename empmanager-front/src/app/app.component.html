@@ -1,245 +1,419 @@
-<main class="w-screen relative overflow-hidden">
-  <!-- Single bar at the top -->
-  <div [ngClass]="'bg-' + currentColor + '-800'" class="absolute top-0 left-0 w-full h-[70px] transition-colors bg-[#8286F4]"></div>
-  <div class="flex w-full h-full relative">
+<main class="w-screen relative overflow-hidden bg-zinc-950">
+  <div class="flex w-full h-full p-2">
     <!-- Sidebar -->
-    <div [ngClass]="{ 'lg:flex': !sidebarCollapsed }" class="{{ isAbsolute ? 'absolute': 'fixed' }} top-0 left-0 hidden min-w-[15%] h-full bg-white rounded-tr-[70px] flex-col">
-      <div class="flex items-center mt-4 px-2 cursor-pointer" (click)="collapseSidebar()">
-        <svg xmlns="http://www.w3.org/2000/svg" class="p-1 rounded-lg hover:border" width="40" height="40" viewBox="0 0 24 24"><path fill="#000000" d="M3 18v-2h13v2zm16.6-1l-5-5l5-5L21 8.4L17.4 12l3.6 3.6zM3 13v-2h10v2zm0-5V6h13v2z"/></svg>
-      </div>
-      <p class="text-xl px-4 font-bold mb-4 mt-12">Filter</p>
-      <div class="flex flex-col w-full px-4 overflow-y-auto custom-scrollbar">
-        <!-- Dropdown for Company Category -->
-        <div class="flex flex-col mb-5">
-          <div class="flex justify-between items-center">
-            <p class="text-sm font-semibold">Companies</p>
-            <div class="flex justify-center items-center cursor-pointer p-1 w-6 h-6 rounded-full hover:bg-slate-100" (click)="toggleDropdown('company')">
-              <svg *ngIf="dropdownId === 'company'" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#000000" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4z"/></svg>
-              <svg *ngIf="dropdownId !== 'company'" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#000000" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg>
-            </div>
+    <div class="w-[18%] transition-all" (click)="closeDropdowns()">
+      <div class="flex flex-col py-4 pl-2 pr-4">
+        <!-- Logo & Text -->
+        <div class="flex items-center gap-2">
+          <div class="inline-block w-8 h-8 justify-center items-center">
+            <img src="../assets/logo.png" class="w-full h-full object-contain" alt="logo" />
           </div>
-          <ng-container *ngFor="let company of companies">
-            <div class="flex justify-between items-center my-2" *ngIf="dropdownId === 'company'">
-              <div class="flex items-center">
-                <input id="linkcompany" type="checkbox" value="{{ company }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" 
-                       (change)="filterEmployeesByCompany($event)">
-                <label for="linkcompany" class="ms-2 text-[12px] leading-3 font-medium text-gray-900">{{ company }}</label>
-              </div>
-              <!-- <div class="flex justify-center items-center p-1 w-6 h-6 bg-purple-200 rounded-sm">
-                <p class="text-[12px] font-semibold text-purple-800">0</p>
-              </div> -->
-            </div>
-          </ng-container>
+          <p class="text-base font-semibold text-white">EmpGest</p>
         </div>
-
-        <!-- Dropdown for Job Title Category -->
-        <div class="flex flex-col mb-5">
-          <div class="flex justify-between items-center">
-            <p class="text-sm font-semibold">Job title</p>
-            <div class="flex justify-center items-center cursor-pointer p-1 w-6 h-6 rounded-full hover:bg-slate-100" (click)="toggleDropdown('jobtitle')">
-              <svg *ngIf="dropdownId === 'jobtitle'" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#000000" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4z"/></svg>
-              <svg *ngIf="dropdownId !== 'jobtitle'" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#000000" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg>
+        <!-- User avatar & desc, arrow down -->
+        <div class="flex w-full mt-8 p-2 bg-zinc-800 rounded-xl">
+          <div class="flex justify-between items-center w-full">
+            <div class="flex items-center gap-2">
+              <div class="flex justify-center items-center rounded-xl p-2 bg-slate-700">
+                <svg xmlns="http://www.w3.org/2000/svg"  width="24" height="24" viewBox="0 0 24 24"><path fill="#ffffff" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4" /></svg>
+              </div>
+              <div class="flex flex-col gap-1">
+                <p class="text-xs text-white/50">Recruiter</p>
+                <p class="text-sm text-white">Patrick N.</p>
+              </div>
+            </div>
+            <div class="flex justify-center items-center cursor-pointer p-1 w-6 h-6 rounded-full hover:bg-gray-700" (click)="toggleDropdown('company')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#9ca3af" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
             </div>
           </div>
-          <ng-container *ngFor="let job of getJobs()">
-            <div class="flex justify-between items-center my-2" *ngIf="dropdownId === 'jobtitle'">
-              <div class="flex items-center">
-                <input id="linkjob" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                <label for="linkjob" class="ms-2 text-[12px] leading-3 font-medium text-gray-900">{{ job }}</label>
-              </div>
-              <!-- <div class="flex justify-center items-center p-1 w-6 h-6 bg-purple-200 rounded-sm">
-                <p class="text-[12px] font-semibold text-purple-800">0</p>
-              </div> -->
+        </div>
+        <!-- Main menus -->
+        <div class="flex w-full mt-12 p-2">
+          <div class="flex flex-col gap-2 w-full">
+            <div class="flex items-center gap-2 p-2 bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#0369a1" d="M14 9q-.425 0-.712-.288T13 8V4q0-.425.288-.712T14 3h6q.425 0 .713.288T21 4v4q0 .425-.288.713T20 9zM4 13q-.425 0-.712-.288T3 12V4q0-.425.288-.712T4 3h6q.425 0 .713.288T11 4v8q0 .425-.288.713T10 13zm10 8q-.425 0-.712-.288T13 20v-8q0-.425.288-.712T14 11h6q.425 0 .713.288T21 12v8q0 .425-.288.713T20 21zM4 21q-.425 0-.712-.288T3 20v-4q0-.425.288-.712T4 15h6q.425 0 .713.288T11 16v4q0 .425-.288.713T10 21z"/></svg>
+              <p class="text-xs text-gray-300">Overview</p>
             </div>
-          </ng-container>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#b45309" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm7-5q.8 0 1.475-.413t1.1-1.087q.15-.225.375-.363t.5-.137H19V5H5v9h3.55q.275 0 .5.138t.375.362q.425.675 1.1 1.088T12 16"/></svg>
+              <p class="text-xs text-gray-300">Inbox</p>
+            </div>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#be185d" d="M1 20v-2.8q0-.85.438-1.562T2.6 14.55q1.55-.775 3.15-1.162T9 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T17 17.2V20zm18 0v-3q0-1.1-.612-2.113T16.65 13.15q1.275.15 2.4.513t2.1.887q.9.5 1.375 1.112T23 17v3zM9 12q-1.65 0-2.825-1.175T5 8t1.175-2.825T9 4t2.825 1.175T13 8t-1.175 2.825T9 12m10-4q0 1.65-1.175 2.825T15 12q-.275 0-.7-.062t-.7-.138q.675-.8 1.038-1.775T15 8t-.362-2.025T13.6 4.2q.35-.125.7-.163T15 4q1.65 0 2.825 1.175T19 8"/></svg>
+              <p class="text-xs text-gray-300">People</p>
+            </div>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#7e22ce" d="M5 3v18h6v-3.5h2V21h6V3zm2 2h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H7zm8 0h2v2h-2z"/></svg>
+              <p class="text-xs text-gray-300">Organisations</p>
+            </div>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 20 20"><path fill="#a16207" d="M2 5.5a1.5 1.5 0 0 1 3 0v9a1.5 1.5 0 0 1-3-.001zm13 0v9a1.5 1.5 0 0 0 3 0v-9a1.5 1.5 0 0 0-3 0M14 14V6H6v8z"/></svg>
+              <p class="text-xs text-gray-300">Pipelines</p>
+            </div>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#15803d" d="M5.5 22q-1.45 0-2.475-1.025T2 18.5q0-1.45 1.025-2.475T5.5 15q.45 0 .875.112t.8.313L11 11.6V8.85q-1.1-.325-1.8-1.237T8.5 5.5q0-1.45 1.025-2.475T12 2q1.45 0 2.475 1.025T15.5 5.5q0 1.2-.7 2.113T13 8.85v2.75l3.85 3.825q.375-.2.788-.312T18.5 15q1.45 0 2.475 1.025T22 18.5q0 1.45-1.025 2.475T18.5 22q-1.45 0-2.475-1.025T15 18.5q0-.45.112-.875t.313-.8L12 13.4l-3.425 3.425q.2.375.313.8T9 18.5q0 1.45-1.025 2.475T5.5 22m13-2q.625 0 1.063-.437T20 18.5q0-.625-.437-1.062T18.5 17q-.625 0-1.062.438T17 18.5q0 .625.438 1.063T18.5 20M12 7q.625 0 1.063-.437T13.5 5.5q0-.625-.437-1.062T12 4q-.625 0-1.062.438T10.5 5.5q0 .625.438 1.063T12 7M5.5 20q.625 0 1.063-.437T7 18.5q0-.625-.437-1.062T5.5 17q-.625 0-1.062.438T4 18.5q0 .625.438 1.063T5.5 20"/></svg>
+              <p class="text-xs text-gray-300">Networks</p>
+            </div>
+            <div class="flex items-center gap-2 p-2 hover:bg-zinc-800 rounded-lg transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#b91c1c" d="M6 13c-2.2 0-4 1.8-4 4s1.8 4 4 4s4-1.8 4-4s-1.8-4-4-4m6-10C9.8 3 8 4.8 8 7s1.8 4 4 4s4-1.8 4-4s-1.8-4-4-4m6 10c-2.2 0-4 1.8-4 4s1.8 4 4 4s4-1.8 4-4s-1.8-4-4-4"/></svg>
+              <p class="text-xs text-gray-300">Views</p>
+            </div>
+          </div>
+        </div>
+        <!-- Store menus -->
+        <div class="flex px-2 py-2 mt-2 border-y border-y-gray-700 w-full">
+          <div class="flex flex-col gap-1 py-4 w-full">
+            <!-- STORE -->
+            <div class="flex items-center gap-1 px-2">
+              <div class="flex justify-center items-center cursor-pointer p-1 w-6 h-6 rounded-full hover:bg-gray-700" (click)="toggleDropdown('company')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full rotate-180" viewBox="0 0 24 24"><path fill="#9ca3af" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+              </div>
+              <p class="text-sm font-medium text-gray-300">STORE</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">Microsoft</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">Facebook</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">ExxonMobil</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">Coca Cola</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">Vodafone</p>
+            </div>
+            <div class="flex items-center gap-2 p-1 rounded-lg transition-colors">
+              <div class="flex justify-center items-center w-6 h-6 rounded-lg bg-slate-900 p-0.5">
+                <img src="../assets/pokeball.png" class="w-full h-full object-contain" alt="company">
+              </div>
+              <p class="text-xs text-gray-300">Carrefour</p>
+            </div>
+          </div>
+        </div>
+        <!-- Archive menus -->
+        <div class="flex px-2 py-2 mt-2 w-full">
+          <!-- ARCHIVE -->
+          <div class="flex items-center gap-1 px-2">
+            <div class="flex justify-center items-center cursor-pointer p-1 w-6 h-6 rounded-full hover:bg-gray-700" (click)="toggleDropdown('company')">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#9ca3af" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+            </div>
+            <p class="text-sm font-medium text-gray-300">ARCHIVE</p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Main Content -->
-    <div [ngClass]="{ 'lg:ml-[15%]': !sidebarCollapsed }" class="relative lg:ml-0 w-full">
+    <div class="relative w-full">
       <div class="min-w-full h-full">
-        <!-- Navbar -->
-        <div class="w-full h-[70px] flex">
-          <div class="flex justify-between items-center w-full h-full px-8">
-            <!-- List menu -->
-            <div [ngClass]="{ 'lg:hidden': !sidebarCollapsed }" class="flex justify-center items-center cursor-pointer p-1 rounded-full hover:bg-slate-100/50" (click)="collapseSidebar()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="rotate-180" width="32" height="32" viewBox="0 0 24 24"><path fill="#ffffff" d="M3 18v-2h13v2zm16.6-1l-5-5l5-5L21 8.4L17.4 12l3.6 3.6zM3 13v-2h10v2zm0-5V6h13v2z"/></svg>
-            </div>
-            <!-- Menu -->
-            <ul class="hidden md:flex justify-center items-center h-full transition-all">
-              <li class="flex justify-center items-center border-b-4 border-b-transparent hover:border-b-white mr-12 px-2 h-full cursor-pointer">
-                <p class="text-sm text-white">Network</p>
-              </li>
-              <li class="flex justify-center items-center border-b-4 {{ tabType === 'line' ? 'border-b-white text-white' : 'bg-white text-black' }} border-b-white mr-12 px-2 h-full cursor-pointer">
-                <p class="text-sm">Employees</p>
-              </li>
-              <li class="flex justify-center items-center border-b-4 border-b-transparent hover:border-b-white mr-12 px-2 h-full cursor-pointer">
-                <p class="text-sm text-white">Jobs</p>
-              </li>
-              <li class="flex justify-center items-center border-b-4 border-b-transparent hover:border-b-white mr-12 px-2 h-full cursor-pointer">
-                <p class="text-sm text-white">Companies</p>
-              </li>
-            </ul>
-            <!-- User details -->
-            <div class="flex justify-center items-center gap-4">
-              <div class="flex md:hidden justify-center items-center cursor-pointer p-1 rounded-full hover:bg-slate-100/50">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#ffffff" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"/></svg>
-              </div>
-              <div class="flex justify-center items-center rounded-full w-10 h-10 bg-white/50 p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="wfull h-full" viewBox="0 0 24 24">
-                  <path fill="#ffffff" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4" />
-                </svg>
-              </div>
-              <div class="hidden lg:flex flex-col gap-0.5">
-                <p class="text-[10px] text-white">Recruiter</p>
-                <p class="text-[12px] leading-4 text-white">Patrick Namegni</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Content -->
-        <div class="w-full p-8 bg-slate-200 min-h-[calc(100vh-70px)] -z-10">
+        <div class="w-full bg-white min-h-screen -z-10 rounded-tl-3xl rounded-tr-3xl">
           <div class="flex flex-col w-full">
-            <div class="flex max-sm:flex-col justify-between mb-6 pb-6 border-b border-b-gray-300 gap-4">
-              <p class="text-xl font-semibold">Overview</p>
-              <!-- Search input & Create button -->
-              <div class="flex max-sm:justify-center justify-end gap-4 w-full">
-                <!-- Search input -->
-                <form class="max-w-md max-sm:w-full">
-                  <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
-                  <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg
-                        class="w-4 h-4 text-gray-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                        />
-                      </svg>
+            <!-- Header -->
+            <div class="flex flex-col p-5 gap-4 relative">
+              <div class="flex max-sm:flex-col justify-between" (click)="closeDropdowns()">
+                <p class="text-xl font-semibold">Overview</p>
+                <!-- Search input & Create button -->
+                <div class="flex max-sm:justify-center justify-end gap-4 w-full">
+                  <!-- Search input -->
+                  <form class="max-w-md max-sm:w-full">
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="search"
+                        id="default-search"
+                        class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Search..."
+                        required
+                        (input)="filterEmployees($event)"
+                        (click)="closeDropdowns()"
+                      />
                     </div>
-                    <input
-                      type="search"
-                      id="default-search"
-                      class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="Search..."
-                      required
-                      (input)="filterEmployees($event)"
-                    />
-                  </div>
-                </form>
+                  </form>
 
-                <!-- Create button -->
-                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2 text-center max-sm:hidden inline-flex items-center me-2 gap-2" (click)="toggleModal()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M15 14c-2.67 0-8 1.33-8 4v2h16v-2c0-2.67-5.33-4-8-4m-9-4V7H4v3H1v2h3v3h2v-3h3v-2m6 2a4 4 0 0 0 4-4a4 4 0 0 0-4-4a4 4 0 0 0-4 4a4 4 0 0 0 4 4"/></svg>
-                  Add
-                </button>
+                  <!-- Create button -->
+                  <button type="button" class="text-white border-2 border-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-2 text-center max-sm:hidden inline-flex items-center me-2 gap-2" (click)="toggleModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#1d4ed8" d="M18 14v-3h-3V9h3V6h2v3h3v2h-3v3zm-9-2q-1.65 0-2.825-1.175T5 8q0-1.65 1.175-2.825T9 4q1.65 0 2.825 1.175T13 8q0 1.65-1.175 2.825T9 12m-8 8v-2.8q0-.85.438-1.562T2.6 14.55q1.55-.775 3.15-1.162T9 13q1.65 0 3.25.388t3.15 1.162q.725.375 1.163 1.088T17 17.2V20z"/></svg>
+                    <p class="text-xs text-[#1d4ed8]">New Employee</p>
+                  </button>
+                </div>
+              </div>
+              <!-- Filters -->
+              <div class="flex justify-between items-center">
+                <!-- Filter & sort dropdowns -->
+                <div class="flex justify-center items-center gap-3">
+                  <!-- Filter dropdown -->
+                  <div class="relative flex justify-center items-center gap-2 rounded-xl px-4 py-2 bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer" (click)="toggleFilterDropdown()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M11 20q-.425 0-.712-.288T10 19v-6L4.2 5.6q-.375-.5-.112-1.05T5 4h14q.65 0 .913.55T19.8 5.6L14 13v6q0 .425-.288.713T13 20z"/></svg>
+                    <p class="text-xs font-medium text-black">Filter</p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4z"/></svg>
+                  </div>
+                  <!-- Sort dropdown -->
+                  <div class="flex justify-center items-center gap-2 rounded-xl px-4 py-2 bg-gray-200 hover:bg-gray-300 transition-colors cursor-pointer" (click)="toggleSortDropdown()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 18V6m0 0l4 4.125M16 6l-4 4.125M8 6v12m0 0l4-4.125M8 18l-4-4.125"/></svg>
+                    <p class="text-xs text-gray-500 font-medium">Sort By: <span class="text-black">{{ !sortTerm.value && !sortOrder.value ? 'None' : sortTerm.value + '(' + sortOrder.value + ')'}}</span></p>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4z"/></svg>
+                  </div>
+                </div>
+                <!-- Group By dropdown -->
+                <div class="flex justify-center items-center gap-2 rounded-xl px-4 py-2 bg-gray-200 hover:bg-gray-300 transition-colors me-2 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"/></svg>
+                  <p class="text-xs text-gray-500 font-medium">Download: <span class="text-black">JSON</span></p>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="m12 15.4l-6-6L7.4 8l4.6 4.6L16.6 8L18 9.4z"/></svg>
+                </div>
+              </div>
+
+              <!-- Dropdowns menus -->
+              <div class="absolute w-[384px] overflow-y-hidden translate-y-24 left-5 z-10">
+                <div class="{{ openDropdownFilter ? 'relative translate-y-0' : 'absolute -translate-y-full' }} bg-white rounded-lg border w-full transition-transform z-50">
+                  <div class="flex flex-col flex-1 pb-4">
+                    <!-- Filter titles -->
+                    <div class="flex px-3 gap-8 border-b border-b-gray-300 transition-colors">
+                      <!-- Filter by company -->
+                      <div class="flex py-4 h-full items-center {{ currentFilter === 'company' && 'border-b-4 border-b-blue-500'}} cursor-pointer" (click)="changeFilter('company')">
+                        <p class="text-sm font-semibold {{ currentFilter === 'company' ? 'text-blue-500' : 'text-gray-500'}}">Companies</p>
+                      </div>
+                      <!-- Filter by work type -->
+                      <div class="flex py-4 h-full items-center {{ currentFilter === 'workType' && 'border-b-4 border-b-blue-500'}} cursor-pointer" (click)="changeFilter('workType')">
+                        <p class="text-sm font-semibold  {{ currentFilter === 'workType' ? 'text-blue-500' : 'text-gray-500'}}">Work type</p>
+                      </div>
+                    </div>
+
+                    <!-- Search input -->
+                    <form class="w-full my-4 px-3">
+                      <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
+                      <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                          <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                          </svg>
+                        </div>
+                        <input
+                          type="search"
+                          id="default-search"
+                          class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="{{ currentFilter === 'company' ? 'Search company' : 'Search work type' }}"
+                          required
+                          (input)="currentFilter === 'company' ? searchCompanies($event) : searchWorkType($event)"
+                          [disabled]="selectedType !== 'All'"
+                        />
+                      </div>
+                    </form>
+
+                    <div *ngIf="currentFilter === 'company'" class="w-full flex flex-col px-3 max-h-48 overflow-y-auto custom-scrollbar">
+                      <ng-container *ngFor="let company of companies">
+                        <div class="w-full flex items-center gap-2 py-2 px-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                          <input id="linkcompany" type="checkbox" value="{{ company }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                [disabled]="selectedType !== 'All'"
+                                (change)="filterEmployeesByCompany($event)">
+                          <label for="linkcompany" class="text-sm font-medium text-gray-900">{{ company }}</label>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div *ngIf="currentFilter === 'workType'" class="w-full flex flex-wrap items-center px-3 max-h-48 overflow-y-auto custom-scrollbar gap-2">
+                      <div class="flex justify-center items-center px-4 py-1 rounded-full {{ selectedType === 'All' ? 'border-2 border-blue-500 text-blue-500' : 'border border-gray-400 text-gray-400' }} hover:border-blue-500 hover:text-blue-500 bg-white cursor-pointer transition-colors" (click)="filterByType('All')">
+                        <p class="text-sm font-medium">All</p>
+                      </div>
+                      <ng-container *ngFor="let type of jobTypes">
+                        <div class="flex justify-center items-center px-4 py-1 rounded-full {{ selectedType === type.name ? 'border-2 border-blue-500 text-blue-500' : 'border border-gray-400 text-gray-400' }} hover:border-blue-500 hover:text-blue-500 bg-white cursor-pointer transition-colors" (click)="filterByType(type.name)">
+                          <p class="text-sm font-medium">{{ type.name }}</p>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sort Dropdown -->
+              <div class="absolute w-[200px] overflow-y-hidden translate-y-24 left-36 z-10">
+                <div class="{{ openDropdownSort ? 'relative translate-y-0' : 'absolute -translate-y-full' }} bg-white rounded-lg border w-full transition-transform z-50">
+                  <div class="w-full flex flex-col px-4 py-2">
+                    <!-- Sort terms -->
+                    <div class="flex flex-col pb-2 mb-2 border-b border-b-gray-200">
+                      <div class="flex justify-between items-center px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer" (click)="changeSortTerm('name')">
+                        <p class="text-xs font-medium {{ sortTerm.name === 'name' ? '' : 'text-gray-500' }}">Employee name</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="{{ sortTerm.name === 'name' ? 'block' : 'hidden' }}" width="20" height="20" viewBox="0 0 24 24"><path fill="#15803d" d="m10.5 13.4l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-5.6 5.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l1.9 1.9Z"/></svg>
+                      </div>
+                      <div class="flex justify-between items-center px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer" (click)="changeSortTerm('jobTitle')">
+                        <p class="text-xs font-medium {{ sortTerm.name === 'jobTitle' ? '' : 'text-gray-500' }}">Job title</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="{{ sortTerm.name === 'jobTitle' ? 'block' : 'hidden' }}" width="20" height="20" viewBox="0 0 24 24"><path fill="#15803d" d="m10.5 13.4l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-5.6 5.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l1.9 1.9Z"/></svg>
+                      </div>
+                      <div class="flex justify-between items-center px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer" (click)="changeSortTerm('companyName')">
+                        <p class="text-xs font-medium {{ sortTerm.name === 'companyName' ? '' : 'text-gray-500' }}">Company name</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="{{ sortTerm.name === 'companyName' ? 'block' : 'hidden' }}" width="20" height="20" viewBox="0 0 24 24"><path fill="#15803d" d="m10.5 13.4l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-5.6 5.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l1.9 1.9Z"/></svg>
+                      </div>
+                    </div>
+                    <!-- Sort options -->
+                    <div class="flex flex-col pb-2 mb-2 border-b border-b-gray-200">
+                      <div class="flex justify-between items-center px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer" (click)="changeSortOrder('asc')">
+                        <div class="flex gap-2">
+                          <p class="text-xs font-medium {{ sortOrder.name === 'asc' ? '' : 'text-gray-500' }}">ASC</p>
+                          <svg *ngIf="sortOrder.name === 'asc'" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19 17h3l-4 4l-4-4h3V3h2m-8 10v2l-3.33 4H11v2H5v-2l3.33-4H5v-2M9 3H7c-1.1 0-2 .9-2 2v6h2V9h2v2h2V5a2 2 0 0 0-2-2m0 4H7V5h2Z"/></svg>
+                          <svg *ngIf="sortOrder.name !== 'asc'" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#6b7280" d="M19 17h3l-4 4l-4-4h3V3h2m-8 10v2l-3.33 4H11v2H5v-2l3.33-4H5v-2M9 3H7c-1.1 0-2 .9-2 2v6h2V9h2v2h2V5a2 2 0 0 0-2-2m0 4H7V5h2Z"/></svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="{{ sortOrder.name === 'asc' ? 'block' : 'hidden' }}" width="20" height="20" viewBox="0 0 24 24"><path fill="#15803d" d="m10.5 13.4l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-5.6 5.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l1.9 1.9Z"/></svg>
+                      </div>
+                      <div class="flex justify-between items-center px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer" (click)="changeSortOrder('desc')">
+                        <div class="flex gap-2">
+                          <p class="text-xs font-medium {{ sortOrder.name === 'desc' ? '' : 'text-gray-500' }}">DESC</p>
+                          <svg *ngIf="sortOrder.name === 'desc'" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19 7h3l-4-4l-4 4h3v14h2m-8-8v2l-3.33 4H11v2H5v-2l3.33-4H5v-2M9 3H7c-1.1 0-2 .9-2 2v6h2V9h2v2h2V5a2 2 0 0 0-2-2m0 4H7V5h2Z"/></svg>
+                          <svg *ngIf="sortOrder.name !== 'desc'" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#6b7280" d="M19 7h3l-4-4l-4 4h3v14h2m-8-8v2l-3.33 4H11v2H5v-2l3.33-4H5v-2M9 3H7c-1.1 0-2 .9-2 2v6h2V9h2v2h2V5a2 2 0 0 0-2-2m0 4H7V5h2Z"/></svg>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="{{ sortOrder.name === 'desc' ? 'block' : 'hidden' }}" width="20" height="20" viewBox="0 0 24 24"><path fill="#15803d" d="m10.5 13.4l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7l-5.6 5.6q-.3.3-.7.3t-.7-.3l-2.6-2.6q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l1.9 1.9Z"/></svg>
+                      </div>
+                    </div>
+                    <!-- Apply button -->
+                    <div class="flex justify-end gap-1">
+                      <div class="flex justify-center items-center px-4 py-2 hover:bg-gray-200 rounded-md cursor-pointer transition-colors" (click)="resetFilters()">
+                        <p class="text-xs font-medium">RESET</p>
+                      </div>
+                      <div class="flex justify-center items-center px-4 py-2 bg-black hover:bg-slate-800 text-white rounded-md cursor-pointer transition-colors" (click)="applyFilters()">
+                        <p class="text-xs font-semibold">APPLY</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div class="w-full flex flex-wrap items-center justify-center gap-4 mb-6">
-              <ng-container *ngFor="let type of jobTypes">
-                <div class="flex justify-center items-center px-4 py-1 rounded-full {{ selectedType === type.name ? 'border-2 border-blue-500 text-blue-500' : 'border border-gray-400 text-gray-400' }} bg-white cursor-pointer" (click)="filterByType(type.name)">
-                  <p class="text-sm font-medium">{{ type.name }}</p>
-                </div>
-              </ng-container>
-            </div>
+            <div class="w-full flex-col gap-4 bg-slate-200 min-h-screen" (click)="closeDropdowns()">
+              <div [ngClass]="{ 'xl:grid-cols-5': sidebarCollapsed }" class="px-5 py-4 grid grid-flow-row sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-0 m-0">
+                <ng-container *ngFor="let employee of employees">
+                  <!-- Employee card -->
+                  <div class="rounded-xl border shadow-sm w-full max-w-sm bg-gray-100 relative hover:shadow-md transition-all group z-0 ">
+                    <div class="flex-col px-4 py-2 gap-2 relative bg-white rounded-t-xl">
+                      <div class="flex max-[380px]:flex-col items-center gap-2 max-w-md">
+                        <span class="relative flex justify-center items-center shrink-0 overflow-hidden rounded-full w-14 h-14 max-[380px]:w-20 max-[380px]:h-20 border">
+                          <span *ngIf="!employee?.imageUrl; else elseBlock" class="flex h-full w-full items-center justify-center rounded-full bg-muted">
+                            {{ getInitials(employee?.name!) }}
+                          </span>
 
-            <div [ngClass]="{ 'xl:grid-cols-5': sidebarCollapsed }" class="w-full grid grid-flow-row sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-0 m-0">
-              <ng-container *ngFor="let employee of employees">
-                <!-- Employee card -->
-                <div class="rounded-xl border shadow-sm w-full max-w-sm bg-gray-100 relative hover:shadow-md transition-all group z-0 ">
-                  <div class="flex-col px-4 py-2 gap-2 relative bg-white rounded-t-xl">
-                    <div class="flex max-[380px]:flex-col items-center gap-2 max-w-md">
-                      <span class="relative flex justify-center items-center shrink-0 overflow-hidden rounded-full w-14 h-14 max-[380px]:w-20 max-[380px]:h-20 border">
-                        <span *ngIf="!employee?.imageUrl; else elseBlock" class="flex h-full w-full items-center justify-center rounded-full bg-muted">
-                          {{ getInitials(employee?.name!) }}
+                          <ng-template #elseBlock>
+                            <img src="{{ employee?.imageUrl }}" alt="avatar" class="w-full h-full object-contain" />
+                          </ng-template>
                         </span>
-
-                        <ng-template #elseBlock>
-                          <img src="{{ employee?.imageUrl }}" alt="avatar" class="w-full h-full object-contain" />
-                        </ng-template>
-                      </span>
-                      <div class="flex flex-col max-[380px]:items-center gap-0.5 text-sm">
-                        <h1 class="font-bold">{{ employee?.name }}</h1>
-                        <p class="text-xs text-gray-500">
-                          {{ employee?.jobTitle }}
-                        </p>
-                        <div class="flex justify-center items-center rounded-full text-[10px] w-12 font-semibold bg-green-200 text-green-800">
-                          Active
+                        <div class="flex flex-col max-[380px]:items-center gap-0.5 text-sm">
+                          <h1 class="font-bold">{{ employee?.name }}</h1>
+                          <p class="text-xs text-gray-500">
+                            {{ employee?.jobTitle }}
+                          </p>
+                          <div class="flex justify-center items-center rounded-full text-[10px] w-12 font-semibold bg-green-200 text-green-800">
+                            Active
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hidden absolute top-0 right-0 xl:bg-white bg-transparent group-hover:flex z-10 rounded-tr-md rounded-br-md">
+                        <div class="flex flex-col ml-4 py-0.5 shadow-sm">
+                          <div class="relative inline-block w-6 h-6 py-1 border-b hover:bg-gray-100" (click)="toggleModal('info', employee)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#64748b" d="M11 9c0 1.66-1.34 3-3 3s-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3m3 11H2v-2c0-2.21 2.69-4 6-4s6 1.79 6 4M7 9c0 .55.45 1 1 1s1-.45 1-1s-.45-1-1-1s-1 .45-1 1m-3 9h8c0-1.1-1.79-2-4-2s-4 .9-4 2m18-6v2h-9v-2m9-4v2h-9V8m9-4v2h-9V4Z"/></svg>
+                          </div>
+                          <div class="relative inline-block w-6 h-6 py-1 border-b hover:bg-gray-100" (click)="toggleModal('edit', employee)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#22c55e" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/></svg>
+                          </div>
+                          <div class="relative inline-block w-6 h-6 py-1 hover:bg-gray-100" (click)="toggleModal('delete', employee)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ef4444" d="m9.4 16.5l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L16 9.9l-1.4-1.4l-2.6 2.6l-2.6-2.6L8 9.9l2.6 2.6L8 15.1zM7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM7 6v13z"/></svg>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <!-- <div class="absolute top-2 right-4 p-2 w-10 h-10 z-1 rounded-full hover:shadow-md cursor-pointer" (click)="toggleSelected(employee.id, employee)">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#000000" d="M16 12a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2m-6 0a2 2 0 0 1 2-2a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2"/></svg>
-                    </div> -->
-
-                    <!-- Buttons Edit, Delete and Details -->
-                    <!-- <div class="hidden absolute top-1 right-1 group-hover:flex gap-1">
-                      <button class="relative inline-block p-1 justify-center w-7 h-7 items-center rounded-full border" (click)="toggleModal('info', employee)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#71717a" d="M12 7q-.825 0-1.412-.587T10 5q0-.825.588-1.412T12 3q.825 0 1.413.588T14 5q0 .825-.587 1.413T12 7m-1.5 14V9h3v12z"/></svg>
-                      </button>
-                      <button class="inline-block p-1 justify-center w-7 h-7 items-center rounded-lg border" (click)="toggleModal('edit', employee)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#22c55e" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/></svg>
-                      </button>
-                      <button class="inline-block p-1 justify-center w-7 h-7 items-center rounded-lg border" (click)="toggleModal('delete', employee)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ef4444" d="m9.4 16.5l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L16 9.9l-1.4-1.4l-2.6 2.6l-2.6-2.6L8 9.9l2.6 2.6L8 15.1zM7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM7 6v13z"/></svg>
-                      </button>
-                    </div> -->
-                    <div class="hidden absolute top-0 right-0 xl:bg-white bg-transparent group-hover:flex z-10 rounded-tr-md rounded-br-md">
-                      <div class="flex flex-col ml-4 py-0.5 shadow-sm">
-                        <div class="relative inline-block w-6 h-6 py-1 border-b hover:bg-gray-100" (click)="toggleModal('info', employee)">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#64748b" d="M11 9c0 1.66-1.34 3-3 3s-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3m3 11H2v-2c0-2.21 2.69-4 6-4s6 1.79 6 4M7 9c0 .55.45 1 1 1s1-.45 1-1s-.45-1-1-1s-1 .45-1 1m-3 9h8c0-1.1-1.79-2-4-2s-4 .9-4 2m18-6v2h-9v-2m9-4v2h-9V8m9-4v2h-9V4Z"/></svg>
-                        </div>
-                        <div class="relative inline-block w-6 h-6 py-1 border-b hover:bg-gray-100" (click)="toggleModal('edit', employee)">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#22c55e" d="M5 19h1.425L16.2 9.225L14.775 7.8L5 17.575zm-2 2v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15q.4 0 .775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM19 6.4L17.6 5zm-3.525 2.125l-.7-.725L16.2 9.225z"/></svg>
-                        </div>
-                        <div class="relative inline-block w-6 h-6 py-1 hover:bg-gray-100" (click)="toggleModal('delete', employee)">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ef4444" d="m9.4 16.5l2.6-2.6l2.6 2.6l1.4-1.4l-2.6-2.6L16 9.9l-1.4-1.4l-2.6 2.6l-2.6-2.6L8 9.9l2.6 2.6L8 15.1zM7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zM17 6H7v13h10zM7 6v13z"/></svg>
-                        </div>
+                    <div class="flex flex-col gap-3 px-5 py-4 text-xs">
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zM20 8l-7.475 4.675q-.125.075-.262.113t-.263.037t-.262-.037t-.263-.113L4 8v10h16zm-8 3l8-5H4zM4 8v.25v-1.475v.025V6v.8v-.012V8.25zv10z"/></svg>
+                        <p class="font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-[30ch]">{{ employee?.email?.toLowerCase() }}</p>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3M6.025 9l1.65-1.65L7.25 5H5.025q.125 1.025.35 2.025T6.025 9m8.95 8.95q.975.425 1.988.675T19 18.95v-2.2l-2.35-.475zm0 0"/></svg>
+                        <p class="font-medium">{{ employee?.phone }} </p>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19 3v18h-6v-3.5h-2V21H5V3zm-4 4h2V5h-2zm-4 0h2V5h-2zM7 7h2V5H7zm8 4h2V9h-2zm-4 0h2V9h-2zm-4 0h2V9H7zm8 4h2v-2h-2zm-4 0h2v-2h-2zm-4 0h2v-2H7zm8 4h2v-2h-2zm-8 0h2v-2H7zM21 1H3v22h18z"/></svg>
+                        <p class="font-medium">{{ employee?.companyName }} </p>
                       </div>
                     </div>
                   </div>
-                  <div class="flex flex-col gap-3 px-5 py-4 text-xs">
-                    <div class="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M4 20q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20zM20 8l-7.475 4.675q-.125.075-.262.113t-.263.037t-.262-.037t-.263-.113L4 8v10h16zm-8 3l8-5H4zM4 8v.25v-1.475v.025V6v.8v-.012V8.25zv10z"/></svg>
-                      <p class="font-medium overflow-hidden text-ellipsis whitespace-nowrap max-w-[30ch]">{{ employee?.email?.toLowerCase() }}</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19.95 21q-3.125 0-6.175-1.362t-5.55-3.863t-3.862-5.55T3 4.05q0-.45.3-.75t.75-.3H8.1q.35 0 .625.238t.325.562l.65 3.5q.05.4-.025.675T9.4 8.45L6.975 10.9q.5.925 1.187 1.787t1.513 1.663q.775.775 1.625 1.438T13.1 17l2.35-2.35q.225-.225.588-.337t.712-.063l3.45.7q.35.1.575.363T21 15.9v4.05q0 .45-.3.75t-.75.3M6.025 9l1.65-1.65L7.25 5H5.025q.125 1.025.35 2.025T6.025 9m8.95 8.95q.975.425 1.988.675T19 18.95v-2.2l-2.35-.475zm0 0"/></svg>
-                      <p class="font-medium">{{ employee?.phone }} </p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000000" d="M19 3v18h-6v-3.5h-2V21H5V3zm-4 4h2V5h-2zm-4 0h2V5h-2zM7 7h2V5H7zm8 4h2V9h-2zm-4 0h2V9h-2zm-4 0h2V9H7zm8 4h2v-2h-2zm-4 0h2v-2h-2zm-4 0h2v-2H7zm8 4h2v-2h-2zm-8 0h2v-2H7zM21 1H3v22h18z"/></svg>
-                      <p class="font-medium">{{ employee?.companyName }} </p>
-                    </div>
-                  </div>
+                </ng-container>
+              </div>
+
+              <!-- Divider -->
+              <div class="px-5"><div class="w-full border-t border-t-gray-300 my-4"></div></div>
+
+              <!-- Pagination & access to specific page -->
+              <div class="flex justify-between items-center px-5 py-4">
+                <!-- Pagination -->
+                <div class="flex justify-center items-center mr-8">
+                  <!-- Previous button -->
+                  <button type="button" class="text-xs text-black border bg-gray-100 hover:bg-gray-300 border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500 disabled:border-gray-200" [disabled]="currentPage === 1" (click)="previousPage()">
+                    <svg *ngIf="currentPage > 1" xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="rotate-90" viewBox="0 0 24 24"><path fill="#000000" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+                    <svg *ngIf="currentPage === 1" xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="rotate-90" viewBox="0 0 24 24"><path fill="#6b7280" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+                    Prev
+                  </button>
+                  <!-- Pages numbers -->
+                  <!-- <ng-container *ngFor="let i of [].constructor(numberOfPages); let j = index">
+                    <button type="button" class="text-xs {{ currentPage === j + 1 ? 'text-gray-100 bg-black hover:bg-black/50' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center" (click)="goToPage(j + 1)">
+                      {{j + 1}}
+                    </button>
+                  </ng-container> -->
+                  <!-- First page -->
+                  <button type="button" class="text-xs {{ currentPage === 1 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(1)">1</button>
+
+                  <!-- Second page -->
+                  <button *ngIf="dataLength > 12 && currentPage < 5"  type="button" class="text-xs {{ currentPage === 2 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(2)">2</button>
+                  <button *ngIf="numberOfPages > 12 && currentPage > 4" type="button" class="text-xs text-black bg-gray-100 hover:bg-gray-300 border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(4)">...</button>
+                  <!-- Third page -->
+                  <button *ngIf="dataLength > 24 && numberOfPages > 12 && currentPage < 5" type="button" class="text-xs {{ currentPage === 3 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(3)">3</button>
+                  <button *ngIf="numberOfPages > 12 && (currentPage >= 5 && currentPage < numberOfPages - 3)" type="button" class="text-xs {{ currentPage ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(currentPage)">{{currentPage}}</button>
+                  <button *ngIf="numberOfPages > 12 && currentPage >= numberOfPages - 3" type="button" class="text-xs {{ currentPage === numberOfPages - 3 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(numberOfPages - 3)">{{numberOfPages - 3}}</button>
+                  <!-- Fourth page -->
+                  <button *ngIf="dataLength > 36 && numberOfPages > 12 && currentPage < 5" type="button" class="text-xs {{ currentPage === 4 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(4)">4</button>
+                  <button *ngIf="numberOfPages > 12 && (currentPage >= 5 && currentPage < numberOfPages - 3)" type="button" class="text-xs text-black bg-gray-100 hover:bg-gray-300 border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(currentPage + 1)">{{currentPage + 1}}</button>
+                  <button *ngIf="numberOfPages > 12 && currentPage >= numberOfPages - 3" type="button" class="text-xs {{ currentPage === numberOfPages - 2 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(numberOfPages - 2)">{{numberOfPages - 2}}</button>
+                  <!-- Before last page -->
+                  <button *ngIf="numberOfPages > 12 && numberOfPages > 4 && currentPage < numberOfPages - 3" type="button" class="text-xs text-black bg-gray-100 hover:bg-gray-300 border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(4)">...</button>
+                  <button *ngIf="numberOfPages > 12 && currentPage >= numberOfPages - 3" type="button" class="text-xs {{ currentPage === numberOfPages - 1 ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(numberOfPages - 1)">{{numberOfPages - 1}}</button>
                   
-                  <!-- CRUD Operations -->
-                  <!-- <div [ngClass]="{ 'hidden': selectedId !== employee.id }" class="w-full h-full absolute top-0 left-0 flex justify-center items-center bg-black/75 rounded-lg z-10">
-                    <div class="flex flex-wrap justify-center items-center gap-2">
-                      <div class="p-2 w-10 h-10 rounded-full bg-green-600 hover:bg-green-500 cursor-pointer" (click)="toggleModal('edit')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ffffff" d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83l3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
-                      </div>
-                      <div class="p-2 w-10 h-10 rounded-full bg-red-600 hover:bg-red-500 cursor-pointer" (click)="toggleModal('delete')">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ffffff" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM8 9h8v10H8zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                      </div>
-                      <div class="p-2 w-10 h-10 rounded-full border hover:bg-white/15 cursor-pointer" (click)="closeSelected()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24"><path fill="#ffffff" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/></svg>
-                      </div>
-                    </div>
-                  </div> -->
+                  <!-- Last page -->
+                  <button *ngIf="numberOfPages > 12" type="button" class="text-xs {{ currentPage === numberOfPages ? 'text-gray-100 bg-black hover:shadow-md hover:shadow-gray-500 transition-colors' : 'text-black bg-gray-100 hover:bg-gray-300' }} border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors" (click)="goToPage(numberOfPages)">{{numberOfPages}}</button>
+                  <!-- Next button -->
+                  <button type="button" class="text-xs text-black border bg-gray-100 hover:bg-gray-300 border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-2 text-center max-sm:hidden inline-flex items-center transition-colors disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500 disabled:border-gray-200" [disabled]="currentPage === numberOfPages || dataLength <= 12" (click)="nextPage()">
+                    Next
+                    <svg *ngIf="currentPage !== numberOfPages" xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="-rotate-90" viewBox="0 0 24 24"><path fill="#000000" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+                    <svg *ngIf="currentPage === numberOfPages" xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="-rotate-90" viewBox="0 0 24 24"><path fill="#6b7280" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+                  </button>
                 </div>
-              </ng-container>
+
+                <!-- Access to specific page -->
+                <form #inputPage="ngForm" class="flex items-center gap-2" (ngSubmit)="goToInputPage(inputPage)">
+                  <p class="text-xs text-black font-medium" for="page">Go to page:</p>
+                  <input ngModel="{{currentPage}}" type="number" name="page" min="1" max="{{numberOfPages}}" class="w-12 h-8 border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md text-xs text-center" />
+                  <button type="submit" class="text-xs text-black border border-gray-400 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md px-3 h-8 me-3 bg-gray-100 hover:bg-gray-300 text-center max-sm:hidden inline-flex items-center">
+                    Go
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="-rotate-90" viewBox="0 0 24 24"><path fill="#000000" d="M12 14.975q-.2 0-.375-.062T11.3 14.7l-4.6-4.6q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275l3.9 3.9l3.9-3.9q.275-.275.7-.275t.7.275t.275.7t-.275.7l-4.6 4.6q-.15.15-.325.213t-.375.062"/></svg>
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
@@ -308,12 +482,9 @@
                   <div class="col-span-2">
                     <label for="workType" class="block mb-2 text-sm font-medium text-gray-900">Work Type</label>
                     <select id="workType" ngModel="{{ optionDesc === 'edit' ? getEmployee.workType : 'Full Time' }}" name="workType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5">
-                      <option class="py-2" value="Full Time">Full Time</option>
-                      <option value="Part Time">Part Time</option>
-                      <option value="contract">Contract</option>
-                      <option value="Contract">Freelance</option>
-                      <option value="Internship">Internship</option>
-                      <option value="Apprenticeship">Apprenticeship</option>
+                      <ng-container *ngFor="let workType of jobTypes">
+                        <option [value]="workType">{{ workType.name }}</option>
+                      </ng-container>
                     </select>
                   </div>
                   <div class="col-span-2">
